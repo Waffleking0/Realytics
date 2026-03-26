@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MicroTrend Tracker — Login</title>
+  <link rel="stylesheet" href="/static/css/styles.css?v=3" />
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-card">
+
+      <!-- Logo / heading -->
+      <h1>&#128202; MicroTrend<span style="color:var(--accent)">Tracker</span></h1>
+      <p class="subtitle">Sign in to your account</p>
+
+      <!-- Error alert -->
+      <div id="alert" class="alert alert-error" style="display:none"></div>
+
+      <!-- Tab switcher -->
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
+        <button class="btn btn-primary" id="tab-login"  onclick="switchTab('login')">Login</button>
+        <button class="btn btn-ghost"   id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- Login form -->
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="l-username">Username</label>
+          <input id="l-username" type="text" placeholder="your_username" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="l-password">Password</label>
+          <input id="l-password" type="password" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="login-btn">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Signup form (hidden by default) -->
+      <form id="signup-form" style="display:none" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label for="s-email">Email</label>
+          <input id="s-email" type="email" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="s-username">Username</label>
+          <input id="s-username" type="text" placeholder="your_username" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="s-password">Password</label>
+          <input id="s-password" type="password" placeholder="••••••••" required autocomplete="new-password" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="signup-btn">
+          Create Account
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="/static/js/auth.js?v=3"></script>
+  <script>
+    redirectIfAuth();   // already logged in → go to dashboard
+
+    /* ── Tab switcher ─────────────────────────────────────────── */
+    function switchTab(tab) {
+      const isLogin = tab === "login";
+      document.getElementById("login-form").style.display  = isLogin ? "" : "none";
+      document.getElementById("signup-form").style.display = isLogin ? "none" : "";
+      document.getElementById("tab-login").className  = isLogin ? "btn btn-primary" : "btn btn-ghost";
+      document.getElementById("tab-signup").className = isLogin ? "btn btn-ghost" : "btn btn-primary";
+      hideAlert();
+    }
+
+    /* ── Alert helpers ────────────────────────────────────────── */
+    function showAlert(msg) {
+      const el = document.getElementById("alert");
+      el.textContent = msg;
+      el.style.display = "";
+    }
+    function hideAlert() {
+      document.getElementById("alert").style.display = "none";
+    }
+
+    /* ── Login ────────────────────────────────────────────────── */
+    async function handleLogin(e) {
+      e.preventDefault();
+      hideAlert();
+      const btn = document.getElementById("login-btn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span> Signing in…`;
+
+      try {
+        const username = document.getElementById("l-username").value.trim();
+        const password = document.getElementById("l-password").value;
+        const token = await apiLogin(username, password);
+        saveToken(token);
+        window.location.href = "/static/index.html";
+      } catch (err) {
+        showAlert(err.message);
+        btn.disabled = false;
+        btn.textContent = "Sign In";
+      }
+    }
+
+    /* ── Signup ───────────────────────────────────────────────── */
+    async function handleSignup(e) {
+      e.preventDefault();
+      hideAlert();
+      const btn = document.getElementById("signup-btn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span> Creating account…`;
+
+      try {
+        const email    = document.getElementById("s-email").value.trim();
+        const username = document.getElementById("s-username").value.trim();
+        const password = document.getElementById("s-password").value;
+        await apiSignup(email, username, password);
+        // Auto-login after signup
+        const token = await apiLogin(username, password);
+        saveToken(token);
+        window.location.href = "/static/index.html";
+      } catch (err) {
+        showAlert(err.message);
+        btn.disabled = false;
+        btn.textContent = "Create Account";
+      }
+    }
+  </script>
+</body>
+</html>
