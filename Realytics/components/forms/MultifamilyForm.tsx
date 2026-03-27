@@ -67,7 +67,7 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Location */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Property Location
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -91,7 +91,7 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
 
       {/* Unit Details */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Unit Details
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -141,7 +141,7 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
 
       {/* Financials */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Purchase & Financing
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -177,9 +177,9 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
             onChange={(e) => update('interestRate', parseFloat(e.target.value) || 0)}
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-300">Loan Term</label>
+            <label className="text-sm font-medium text-gray-700">Loan Term</label>
             <select
-              className="w-full bg-gray-800/60 border border-gray-700 rounded-xl text-white text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
+              className="w-full bg-white border border-gray-300 rounded-xl text-gray-900 text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
               value={form.loanTermYears}
               onChange={(e) => update('loanTermYears', parseInt(e.target.value))}
             >
@@ -193,7 +193,7 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
 
       {/* Operating Expenses */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Operating Expenses
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -212,11 +212,11 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
       {/* Preview */}
       {form.numberOfUnits > 0 && form.averageRentPerUnit > 0 && form.purchasePrice > 0 && (
         <div className="p-4 bg-orange-500/5 border border-orange-500/20 rounded-xl">
-          <p className="text-xs text-gray-400 mb-2 font-medium">Multifamily Preview</p>
+          <p className="text-xs text-gray-500 mb-2 font-medium">Multifamily Preview</p>
           <div className="grid grid-cols-4 gap-3">
             <div>
               <div className="text-xs text-gray-500">Gross Monthly</div>
-              <div className="text-sm font-bold text-white">${grossMonthlyRent.toLocaleString()}</div>
+              <div className="text-sm font-bold text-gray-900">${grossMonthlyRent.toLocaleString()}</div>
             </div>
             <div>
               <div className="text-xs text-gray-500">Est. Cap Rate</div>
@@ -226,11 +226,11 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
             </div>
             <div>
               <div className="text-xs text-gray-500">Price/Unit</div>
-              <div className="text-sm font-bold text-white">${pricePerUnit.toLocaleString()}</div>
+              <div className="text-sm font-bold text-gray-900">${pricePerUnit.toLocaleString()}</div>
             </div>
             <div>
               <div className="text-xs text-gray-500">GRM</div>
-              <div className="text-sm font-bold text-white">{grm}x</div>
+              <div className="text-sm font-bold text-gray-900">{grm}x</div>
             </div>
           </div>
         </div>

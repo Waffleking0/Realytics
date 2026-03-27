@@ -60,7 +60,7 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
       <div className={clsx('p-5 rounded-xl border', riskCfg.bg, riskCfg.border)}>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wide font-medium mb-1">Risk Level</p>
+            <p className="text-xs text-gray-500 uppercase tracking-wide font-medium mb-1">Risk Level</p>
             <div className="flex items-center gap-3">
               <div className={clsx('w-3 h-3 rounded-full animate-pulse', riskCfg.dot)} />
               <span className={clsx('text-3xl font-extrabold', riskCfg.text)}>
@@ -69,10 +69,10 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-400 mb-1">Risk Score</p>
+            <p className="text-xs text-gray-500 mb-1">Risk Score</p>
             <div className={clsx('text-4xl font-extrabold tabular-nums', riskCfg.text)}>
               {marketAnalysis.riskScore}
-              <span className="text-lg text-gray-500 font-normal">/100</span>
+              <span className="text-lg text-gray-400 font-normal">/100</span>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
             <span>Low Risk</span>
             <span>High Risk</span>
           </div>
-          <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={clsx('h-full bg-gradient-to-r rounded-full transition-all duration-1000', riskCfg.barColor)}
               style={{ width: `${marketAnalysis.riskScore}%` }}
@@ -93,14 +93,14 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
       </div>
 
       {/* Market Strength */}
-      <div className="p-4 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+      <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-sm font-medium text-gray-300">Market Strength</p>
+          <p className="text-sm font-medium text-gray-700">Market Strength</p>
           <span className={clsx('text-sm font-bold', strengthCfg.color)}>
             {marketAnalysis.marketStrength}
           </span>
         </div>
-        <div className="h-2 bg-gray-700 rounded-full overflow-hidden mb-3">
+        <div className="h-2 bg-gray-200 rounded-full overflow-hidden mb-3">
           <div
             className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full transition-all duration-1000"
             style={{ width: `${marketAnalysis.marketStrengthScore}%` }}
@@ -109,34 +109,34 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
           <div>
             <div className="text-gray-500">Vacancy Rate</div>
-            <div className="font-medium text-white">{marketAnalysis.vacancyRate.toFixed(1)}%</div>
+            <div className="font-medium text-gray-900">{marketAnalysis.vacancyRate.toFixed(1)}%</div>
           </div>
           <div>
             <div className="text-gray-500">Appreciation</div>
-            <div className="font-medium text-white">{marketAnalysis.averageAppreciation.toFixed(1)}%/yr</div>
+            <div className="font-medium text-gray-900">{marketAnalysis.averageAppreciation.toFixed(1)}%/yr</div>
           </div>
           <div>
             <div className="text-gray-500">Employment</div>
-            <div className="font-medium text-white">{marketAnalysis.employmentRate.toFixed(1)}%</div>
+            <div className="font-medium text-gray-900">{marketAnalysis.employmentRate.toFixed(1)}%</div>
           </div>
           <div>
             <div className="text-gray-500">Population Growth</div>
-            <div className="font-medium text-white">{marketAnalysis.populationGrowth.toFixed(1)}%/yr</div>
+            <div className="font-medium text-gray-900">{marketAnalysis.populationGrowth.toFixed(1)}%/yr</div>
           </div>
           <div>
             <div className="text-gray-500">Median Income</div>
-            <div className="font-medium text-white">${(marketAnalysis.medianIncome / 1000).toFixed(0)}K</div>
+            <div className="font-medium text-gray-900">${(marketAnalysis.medianIncome / 1000).toFixed(0)}K</div>
           </div>
           <div>
             <div className="text-gray-500">Strength Score</div>
-            <div className="font-medium text-white">{marketAnalysis.marketStrengthScore}/100</div>
+            <div className="font-medium text-gray-900">{marketAnalysis.marketStrengthScore}/100</div>
           </div>
         </div>
       </div>
 
       {/* Risk Factors */}
       <div className="space-y-3">
-        <p className="text-sm font-semibold text-gray-300">Risk Factors Analysis</p>
+        <p className="text-sm font-semibold text-gray-700">Risk Factors Analysis</p>
 
         {/* Positive Factors */}
         {positiveFactors.length > 0 && (
@@ -157,8 +157,8 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
                     <span className="text-xs font-semibold text-green-400">{factor.name}</span>
                     <span className="text-xs text-gray-500 flex-shrink-0">{factor.score}/100</span>
                   </div>
-                  <p className="text-xs text-gray-400 leading-relaxed">{factor.description}</p>
-                  <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
+                  <p className="text-xs text-gray-600 leading-relaxed">{factor.description}</p>
+                  <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-green-500 rounded-full"
                       style={{ width: `${factor.score}%` }}
@@ -189,8 +189,8 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
                     <span className="text-xs font-semibold text-blue-400">{factor.name}</span>
                     <span className="text-xs text-gray-500 flex-shrink-0">{factor.score}/100</span>
                   </div>
-                  <p className="text-xs text-gray-400 leading-relaxed">{factor.description}</p>
-                  <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
+                  <p className="text-xs text-gray-600 leading-relaxed">{factor.description}</p>
+                  <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full"
                       style={{ width: `${factor.score}%` }}
@@ -221,8 +221,8 @@ export default function RiskScore({ marketAnalysis }: RiskScoreProps) {
                     <span className="text-xs font-semibold text-red-400">{factor.name}</span>
                     <span className="text-xs text-gray-500 flex-shrink-0">{factor.score}/100</span>
                   </div>
-                  <p className="text-xs text-gray-400 leading-relaxed">{factor.description}</p>
-                  <div className="mt-2 h-1 bg-gray-700 rounded-full overflow-hidden">
+                  <p className="text-xs text-gray-600 leading-relaxed">{factor.description}</p>
+                  <div className="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-red-500 rounded-full"
                       style={{ width: `${factor.score}%` }}

@@ -30,7 +30,7 @@ export default function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-sm font-medium text-gray-300"
+          className="text-sm font-medium text-gray-700"
         >
           {label}
           {props.required && <span className="text-red-400 ml-1">*</span>}
@@ -38,7 +38,7 @@ export default function Input({
       )}
       <div className="relative flex items-center">
         {prefix && (
-          <span className="absolute left-3 text-gray-400 text-sm font-medium select-none pointer-events-none">
+          <span className="absolute left-3 text-gray-500 text-sm font-medium select-none pointer-events-none">
             {prefix}
           </span>
         )}
@@ -46,19 +46,19 @@ export default function Input({
           id={inputId}
           {...props}
           className={clsx(
-            'w-full bg-gray-800/60 border rounded-xl text-white placeholder-gray-500 text-sm py-2.5 transition-all duration-200',
+            'w-full bg-white border rounded-xl text-gray-900 placeholder-gray-400 text-sm py-2.5 transition-all duration-200',
             prefix ? 'pl-7 pr-3' : 'px-3',
             suffix ? 'pr-10' : '',
             error
-              ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/20'
-              : 'border-gray-700 focus:border-blue-500 focus:ring-blue-500/15',
+              ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20'
+              : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/15',
             'focus:outline-none focus:ring-2',
             'disabled:opacity-50 disabled:cursor-not-allowed',
             className
           )}
         />
         {suffix && (
-          <span className="absolute right-3 text-gray-400 text-sm font-medium select-none pointer-events-none">
+          <span className="absolute right-3 text-gray-500 text-sm font-medium select-none pointer-events-none">
             {suffix}
           </span>
         )}

@@ -66,7 +66,7 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Location */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Property Location
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -90,7 +90,7 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
 
       {/* Purchase Details */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Purchase Details
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -125,9 +125,9 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
             onChange={(e) => update('interestRate', parseFloat(e.target.value) || 0)}
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-300">Loan Term</label>
+            <label className="text-sm font-medium text-gray-700">Loan Term</label>
             <select
-              className="w-full bg-gray-800/60 border border-gray-700 rounded-xl text-white text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
+              className="w-full bg-white border border-gray-300 rounded-xl text-gray-900 text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
               value={form.loanTermYears}
               onChange={(e) => update('loanTermYears', parseInt(e.target.value))}
             >
@@ -151,7 +151,7 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
 
       {/* Tenant & Lease Details */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Tenant & Lease Details
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -178,7 +178,7 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
 
       {/* Income & Expenses */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Income & Expenses
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -220,7 +220,7 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
       {/* Preview */}
       {form.grossMonthlyRent > 0 && form.purchasePrice > 0 && (
         <div className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl">
-          <p className="text-xs text-gray-400 mb-2 font-medium">Estimated Metrics</p>
+          <p className="text-xs text-gray-500 mb-2 font-medium">Estimated Metrics</p>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <div className="text-xs text-gray-500">Est. Cap Rate</div>
@@ -230,11 +230,11 @@ export default function CommercialForm({ onSubmit, loading }: CommercialFormProp
             </div>
             <div>
               <div className="text-xs text-gray-500">Annual NOI</div>
-              <div className="text-sm font-bold text-white">${Math.round(annualNOI).toLocaleString()}</div>
+              <div className="text-sm font-bold text-gray-900">${Math.round(annualNOI).toLocaleString()}</div>
             </div>
             <div>
               <div className="text-xs text-gray-500">Price/Sqft</div>
-              <div className="text-sm font-bold text-white">${pricePerSqft}</div>
+              <div className="text-sm font-bold text-gray-900">${pricePerSqft}</div>
             </div>
           </div>
         </div>

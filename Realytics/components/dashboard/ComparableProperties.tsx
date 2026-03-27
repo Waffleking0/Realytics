@@ -49,12 +49,12 @@ export default function ComparableProperties({
           <div className="grid grid-cols-3 gap-4">
             <div>
               <div className="text-xs text-gray-500">Price</div>
-              <div className="text-sm font-bold text-white">{formatPrice(subjectPrice)}</div>
+              <div className="text-sm font-bold text-gray-900">{formatPrice(subjectPrice)}</div>
             </div>
             {subjectSize && (
               <div>
                 <div className="text-xs text-gray-500">Price/sqft</div>
-                <div className="text-sm font-bold text-white">
+                <div className="text-sm font-bold text-gray-900">
                   ${Math.round(subjectPrice / subjectSize).toLocaleString()}
                 </div>
               </div>
@@ -80,12 +80,12 @@ export default function ComparableProperties({
           return (
             <div
               key={comp.id}
-              className="p-4 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-gray-600 transition-colors"
+              className="p-4 bg-gray-50 border border-gray-200 rounded-xl hover:border-gray-300 transition-colors"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-medium text-gray-500 bg-gray-700 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-medium text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">
                       #{idx + 1}
                     </span>
                     <div className="flex items-center gap-1 text-xs text-gray-400 truncate">
@@ -97,17 +97,17 @@ export default function ComparableProperties({
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-2">
                     <div>
                       <div className="text-xs text-gray-500">Price</div>
-                      <div className="text-sm font-bold text-white">{formatPrice(comp.price)}</div>
+                      <div className="text-sm font-bold text-gray-900">{formatPrice(comp.price)}</div>
                     </div>
                     <div>
                       <div className="text-xs text-gray-500">Size</div>
-                      <div className="text-sm font-medium text-gray-200">
+                      <div className="text-sm font-medium text-gray-700">
                         {comp.size.toLocaleString()} sqft
                       </div>
                     </div>
                     <div>
                       <div className="text-xs text-gray-500">$/sqft</div>
-                      <div className="text-sm font-medium text-gray-200">
+                      <div className="text-sm font-medium text-gray-700">
                         ${comp.pricePerSqft.toLocaleString()}
                         {avgPricePerSqft > 0 && (
                           <span className={clsx('text-xs ml-1', comp.pricePerSqft <= avgPricePerSqft ? 'text-green-400' : 'text-red-400')}>
@@ -171,22 +171,22 @@ export default function ComparableProperties({
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-800">
+      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-200">
         <div className="text-center">
           <div className="text-xs text-gray-500 mb-1">Avg Price</div>
-          <div className="text-sm font-bold text-white">
+          <div className="text-sm font-bold text-gray-900">
             {formatPrice(comparables.reduce((s, c) => s + c.price, 0) / comparables.length)}
           </div>
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-500 mb-1">Avg $/sqft</div>
-          <div className="text-sm font-bold text-white">
+          <div className="text-sm font-bold text-gray-900">
             ${Math.round(avgPricePerSqft).toLocaleString()}
           </div>
         </div>
         <div className="text-center">
           <div className="text-xs text-gray-500 mb-1">Avg Cap Rate</div>
-          <div className="text-sm font-bold text-white">
+          <div className="text-sm font-bold text-gray-900">
             {avgCapRate > 0 ? `${avgCapRate.toFixed(1)}%` : 'N/A'}
           </div>
         </div>

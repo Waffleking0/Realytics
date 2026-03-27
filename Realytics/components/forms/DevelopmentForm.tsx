@@ -63,7 +63,7 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Location */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Project Location
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -87,7 +87,7 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
 
       {/* Project Costs */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Project Costs
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -137,7 +137,7 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
 
       {/* Timeline & Exit */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Timeline & Exit Strategy
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -156,7 +156,7 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
 
           {/* Exit Strategy */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-300">Exit Strategy</label>
+            <label className="text-sm font-medium text-gray-700">Exit Strategy</label>
             <div className="flex gap-3">
               {(['sale', 'rent'] as const).map((strategy) => (
                 <button
@@ -166,7 +166,7 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
                   className={`flex-1 py-2.5 px-4 rounded-xl border text-sm font-medium transition-all ${
                     form.exitStrategy === strategy
                       ? 'bg-blue-500/15 border-blue-500 text-blue-400'
-                      : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-500'
+                      : 'bg-gray-100 border-gray-200 text-gray-500 hover:border-gray-400'
                   }`}
                 >
                   {strategy === 'sale' ? '🏷️ Sell' : '🔑 Rent / Hold'}
@@ -202,7 +202,7 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
       {/* Cost Breakdown */}
       {totalDevCost > 0 && (
         <div className="p-4 bg-yellow-500/5 border border-yellow-500/20 rounded-xl">
-          <p className="text-xs text-gray-400 mb-3 font-medium">Project Cost Breakdown</p>
+          <p className="text-xs text-gray-500 mb-3 font-medium">Project Cost Breakdown</p>
           <div className="space-y-2">
             {[
               { label: 'Land Cost', value: form.landCost, pct: (form.landCost / totalProjectCost) * 100 },
@@ -211,25 +211,25 @@ export default function DevelopmentForm({ onSubmit, loading }: DevelopmentFormPr
               { label: 'Financing Cost', value: financingCost, pct: (financingCost / totalProjectCost) * 100 },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3">
-                <div className="text-xs text-gray-400 w-36 flex-shrink-0">{item.label}</div>
-                <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                <div className="text-xs text-gray-500 w-36 flex-shrink-0">{item.label}</div>
+                <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-full"
                     style={{ width: `${Math.min(100, item.pct)}%` }}
                   />
                 </div>
-                <div className="text-xs text-gray-300 w-28 text-right">
+                <div className="text-xs text-gray-700 w-28 text-right">
                   ${Math.round(item.value).toLocaleString()}
                 </div>
               </div>
             ))}
-            <div className="pt-2 border-t border-gray-700 flex justify-between">
-              <span className="text-sm font-medium text-white">Total Project Cost</span>
-              <span className="text-sm font-bold text-white">${Math.round(totalProjectCost).toLocaleString()}</span>
+            <div className="pt-2 border-t border-gray-200 flex justify-between">
+              <span className="text-sm font-medium text-gray-900">Total Project Cost</span>
+              <span className="text-sm font-bold text-gray-900">${Math.round(totalProjectCost).toLocaleString()}</span>
             </div>
             {form.estimatedValue > 0 && (
               <div className="flex justify-between">
-                <span className="text-sm font-medium text-gray-300">
+                <span className="text-sm font-medium text-gray-700">
                   Development Spread
                 </span>
                 <span className={`text-sm font-bold ${parseFloat(developmentSpread) >= 15 ? 'text-green-400' : 'text-yellow-400'}`}>

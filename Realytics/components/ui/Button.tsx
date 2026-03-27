@@ -20,11 +20,11 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary:
     'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white shadow-lg shadow-blue-500/20 border border-blue-400/20',
   secondary:
-    'bg-transparent border border-gray-600 hover:border-blue-500 text-gray-300 hover:text-white hover:bg-gray-800',
+    'bg-transparent border border-gray-300 hover:border-blue-500 text-gray-600 hover:text-gray-900 hover:bg-gray-50',
   danger:
     'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg shadow-red-500/20 border border-red-400/20',
   ghost:
-    'bg-transparent hover:bg-gray-800 text-gray-400 hover:text-white border border-transparent',
+    'bg-transparent hover:bg-gray-100 text-gray-500 hover:text-gray-900 border border-transparent',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -52,7 +52,7 @@ export default function Button({
       {...props}
       disabled={isDisabled}
       className={clsx(
-        'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 select-none',
+        'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white select-none',
         variantClasses[variant],
         sizeClasses[size],
         fullWidth && 'w-full',

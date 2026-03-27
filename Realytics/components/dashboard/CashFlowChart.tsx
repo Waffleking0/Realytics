@@ -43,11 +43,11 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
   if (!active || !payload || !payload.length) return null;
 
   return (
-    <div className="bg-gray-900 border border-gray-700 rounded-xl p-3 shadow-xl min-w-44">
-      <p className="text-xs text-gray-400 mb-2 font-medium">Year {label}</p>
+    <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-xl min-w-44">
+      <p className="text-xs text-gray-500 mb-2 font-medium">Year {label}</p>
       {payload.map((entry) => (
         <div key={entry.name} className="flex justify-between gap-4 mb-1">
-          <span className="text-xs text-gray-400">{entry.name}</span>
+          <span className="text-xs text-gray-500">{entry.name}</span>
           <span
             className="text-xs font-semibold"
             style={{ color: entry.color }}
@@ -76,11 +76,11 @@ export default function CashFlowChart({ projections }: CashFlowChartProps) {
       <div className="mb-4 flex flex-wrap gap-4 text-xs">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-sm bg-blue-500 opacity-80" />
-          <span className="text-gray-400">Annual Cash Flow</span>
+          <span className="text-gray-500">Annual Cash Flow</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-1 bg-purple-400 rounded" />
-          <span className="text-gray-400">Cumulative Cash Flow</span>
+          <span className="text-gray-500">Cumulative Cash Flow</span>
         </div>
       </div>
       <ResponsiveContainer width="100%" height={280}>
@@ -94,7 +94,7 @@ export default function CashFlowChart({ projections }: CashFlowChartProps) {
               <stop offset="95%" stopColor="#a78bfa" stopOpacity={0.0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
           <XAxis
             dataKey="year"
             tick={{ fill: '#6b7280', fontSize: 11 }}
@@ -111,7 +111,7 @@ export default function CashFlowChart({ projections }: CashFlowChartProps) {
           />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }} />
           {hasNegative && (
-            <ReferenceLine y={0} stroke="#374151" strokeDasharray="4 4" />
+            <ReferenceLine y={0} stroke="#d1d5db" strokeDasharray="4 4" />
           )}
           <Bar
             dataKey="cashFlow"
@@ -133,7 +133,7 @@ export default function CashFlowChart({ projections }: CashFlowChartProps) {
       </ResponsiveContainer>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-gray-800">
+      <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-gray-200">
         <div className="text-center">
           <div className="text-xs text-gray-500 mb-1">Year 1 Cash Flow</div>
           <div

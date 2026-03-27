@@ -60,7 +60,7 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Property Location */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Property Location
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -86,7 +86,7 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
 
       {/* Purchase Details */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Purchase Details
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -125,11 +125,11 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
             required
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-300">
+            <label className="text-sm font-medium text-gray-700">
               Loan Term <span className="text-red-400">*</span>
             </label>
             <select
-              className="w-full bg-gray-800/60 border border-gray-700 rounded-xl text-white text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
+              className="w-full bg-white border border-gray-300 rounded-xl text-gray-900 text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
               value={form.loanTermYears}
               onChange={(e) => update('loanTermYears', parseInt(e.target.value))}
             >
@@ -144,7 +144,7 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
 
       {/* Income & Expenses */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3 pb-2 border-b border-gray-800">
+        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3 pb-2 border-b border-gray-200">
           Income & Expenses
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -178,9 +178,9 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
             hint="One-time upfront costs"
           />
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-300">Property Condition</label>
+            <label className="text-sm font-medium text-gray-700">Property Condition</label>
             <select
-              className="w-full bg-gray-800/60 border border-gray-700 rounded-xl text-white text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
+              className="w-full bg-white border border-gray-300 rounded-xl text-gray-900 text-sm py-2.5 px-3 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/15 transition-all"
               value={form.propertyCondition}
               onChange={(e) =>
                 update('propertyCondition', e.target.value as ResidentialInputs['propertyCondition'])
@@ -198,21 +198,21 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
       {/* Quick Stats */}
       {form.purchasePrice > 0 && form.monthlyRent > 0 && (
         <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-xl">
-          <p className="text-xs text-gray-400 mb-2 font-medium">Quick Preview</p>
+          <p className="text-xs text-gray-500 mb-2 font-medium">Quick Preview</p>
           <div className="grid grid-cols-3 gap-4">
             <div>
               <div className="text-xs text-gray-500">Gross Rent Multiplier</div>
-              <div className="text-sm font-bold text-white">
+              <div className="text-sm font-bold text-gray-900">
                 {(form.purchasePrice / (form.monthlyRent * 12)).toFixed(1)}x
               </div>
             </div>
             <div>
               <div className="text-xs text-gray-500">Down Payment %</div>
-              <div className="text-sm font-bold text-white">{downPaymentPct}%</div>
+              <div className="text-sm font-bold text-gray-900">{downPaymentPct}%</div>
             </div>
             <div>
               <div className="text-xs text-gray-500">Price-to-Rent</div>
-              <div className="text-sm font-bold text-white">
+              <div className="text-sm font-bold text-gray-900">
                 {(form.purchasePrice / form.monthlyRent).toFixed(0)}x
               </div>
             </div>

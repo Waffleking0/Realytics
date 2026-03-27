@@ -229,37 +229,37 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f1e]">
+    <div className="min-h-screen bg-gray-100">
       {/* Top Navigation */}
-      <nav className="border-b border-gray-800/50 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0f1e]/90">
+      <nav className="border-b border-gray-200 backdrop-blur-sm sticky top-0 z-50 bg-gray-100/90">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors text-sm"
+              className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 transition-colors text-sm"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="hidden sm:block">Back</span>
             </Link>
-            <div className="w-px h-5 bg-gray-700" />
+            <div className="w-px h-5 bg-gray-300" />
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
                 <Building2 className="w-4 h-4 text-white" />
               </div>
-              <span className="text-lg font-bold text-white">Realytics</span>
+              <span className="text-lg font-bold text-gray-900">Realytics</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
             {result && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-400 hover:text-white border border-gray-700 hover:border-gray-500 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-500 hover:text-gray-900 border border-gray-300 hover:border-gray-400 rounded-lg transition-colors"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 New Analysis
               </button>
             )}
-            <span className="text-xs text-gray-500 hidden sm:block">Deal Analyzer</span>
+            <span className="text-xs text-gray-400 hidden sm:block">Deal Analyzer</span>
           </div>
         </div>
       </nav>
@@ -267,10 +267,10 @@ export default function AnalyzePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Real Estate Deal Analyzer
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-600">
             Enter your property details below to receive a complete financial analysis, market risk assessment, and AI investment recommendation.
           </p>
         </div>
@@ -328,12 +328,12 @@ export default function AnalyzePage() {
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 space-y-4">
             <div className="relative">
-              <div className="w-16 h-16 border-4 border-gray-700 rounded-full" />
+              <div className="w-16 h-16 border-4 border-gray-200 rounded-full" />
               <div className="absolute inset-0 w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
             </div>
             <div className="text-center">
-              <p className="text-white font-medium">Analyzing your deal...</p>
-              <p className="text-gray-400 text-sm mt-1">Running financial calculations, market analysis, and generating AI report</p>
+              <p className="text-gray-900 font-medium">Analyzing your deal...</p>
+              <p className="text-gray-600 text-sm mt-1">Running financial calculations, market analysis, and generating AI report</p>
             </div>
           </div>
         )}
@@ -344,7 +344,7 @@ export default function AnalyzePage() {
             <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-red-400">Analysis Failed</p>
-              <p className="text-sm text-gray-400 mt-0.5">{error}</p>
+              <p className="text-sm text-gray-600 mt-0.5">{error}</p>
             </div>
           </div>
         )}
@@ -355,11 +355,11 @@ export default function AnalyzePage() {
             {/* Results Header */}
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-blue-400" />
                   Analysis Results
                 </h2>
-                <p className="text-xs text-gray-500 mt-0.5">
+                <p className="text-xs text-gray-400 mt-0.5">
                   Generated {new Date(result.timestamp).toLocaleString()} · {result.type.charAt(0).toUpperCase() + result.type.slice(1)} Property
                 </p>
               </div>
@@ -455,10 +455,10 @@ export default function AnalyzePage() {
             </Card>
 
             {/* Bottom CTA */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-gray-900 border border-gray-700/50 rounded-xl">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-white border border-gray-200 rounded-xl">
               <div>
-                <p className="text-sm font-medium text-white">Want to analyze another deal?</p>
-                <p className="text-xs text-gray-400">Start fresh with new property details.</p>
+                <p className="text-sm font-medium text-gray-900">Want to analyze another deal?</p>
+                <p className="text-xs text-gray-500">Start fresh with new property details.</p>
               </div>
               <button
                 onClick={handleReset}

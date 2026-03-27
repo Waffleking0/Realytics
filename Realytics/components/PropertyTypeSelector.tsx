@@ -69,7 +69,7 @@ const propertyTypes: {
 export default function PropertyTypeSelector({ selected, onChange }: PropertyTypeSelectorProps) {
   return (
     <div className="w-full">
-      <h2 className="text-lg font-semibold text-white mb-3">Select Property Type</h2>
+      <h2 className="text-lg font-semibold text-gray-900 mb-3">Select Property Type</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {propertyTypes.map((type) => {
           const Icon = type.icon;
@@ -83,19 +83,19 @@ export default function PropertyTypeSelector({ selected, onChange }: PropertyTyp
                 'relative flex flex-col items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer text-left',
                 isSelected
                   ? `${type.bgColor} ${type.borderColor} shadow-lg`
-                  : 'bg-gray-900 border-gray-700 hover:border-gray-500 hover:bg-gray-800'
+                  : 'bg-white border-gray-200 hover:border-gray-400 hover:bg-gray-50'
               )}
             >
               <div
                 className={clsx(
                   'p-2.5 rounded-xl transition-colors',
-                  isSelected ? type.bgColor : 'bg-gray-800'
+                  isSelected ? type.bgColor : 'bg-gray-100'
                 )}
               >
                 <Icon
                   className={clsx(
                     'w-6 h-6 transition-colors',
-                    isSelected ? type.color : 'text-gray-400'
+                    isSelected ? type.color : 'text-gray-500'
                   )}
                 />
               </div>
@@ -103,7 +103,7 @@ export default function PropertyTypeSelector({ selected, onChange }: PropertyTyp
                 <div
                   className={clsx(
                     'text-sm font-semibold transition-colors',
-                    isSelected ? 'text-white' : 'text-gray-300'
+                    isSelected ? 'text-gray-900' : 'text-gray-700'
                   )}
                 >
                   {type.label}

@@ -34,10 +34,10 @@ export default function Card({
   return (
     <div
       className={clsx(
-        'rounded-2xl border border-gray-700/50',
+        'rounded-2xl border border-gray-200',
         glass
-          ? 'bg-gray-900/70 backdrop-blur-md'
-          : 'bg-gray-900',
+          ? 'bg-white/70 backdrop-blur-md'
+          : 'bg-white',
         accentBorderClasses[accent],
         className
       )}
@@ -47,15 +47,15 @@ export default function Card({
           className={clsx(
             'flex items-start justify-between',
             noPadding ? 'px-5 pt-5' : 'px-5 pt-5',
-            children ? 'pb-4 border-b border-gray-800/60' : 'pb-4'
+            children ? 'pb-4 border-b border-gray-100' : 'pb-4'
           )}
         >
           <div>
             {title && (
-              <h3 className="text-base font-semibold text-white">{title}</h3>
+              <h3 className="text-base font-semibold text-gray-900">{title}</h3>
             )}
             {subtitle && (
-              <p className="text-xs text-gray-400 mt-0.5">{subtitle}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
             )}
           </div>
           {headerAction && (

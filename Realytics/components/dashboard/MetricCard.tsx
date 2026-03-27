@@ -60,7 +60,7 @@ export default function MetricCard({
   const TrendIcon =
     trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus;
   const trendColor =
-    trend === 'up' ? 'text-green-400' : trend === 'down' ? 'text-red-400' : 'text-gray-400';
+    trend === 'up' ? 'text-green-500' : trend === 'down' ? 'text-red-500' : 'text-gray-400';
 
   return (
     <div
@@ -73,7 +73,7 @@ export default function MetricCard({
       )}
     >
       <div className="flex items-start justify-between gap-2 mb-1">
-        <p className={clsx('font-medium text-gray-400 leading-tight', sz.label)}>
+        <p className={clsx('font-medium text-gray-600 leading-tight', sz.label)}>
           {label}
         </p>
         <div className="flex items-center gap-1.5 flex-shrink-0">

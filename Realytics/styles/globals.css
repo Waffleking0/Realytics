@@ -3,23 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #0a0f1e;
-  --background-secondary: #111827;
-  --background-tertiary: #1f2937;
-  --surface: #1e293b;
-  --surface-hover: #263548;
-  --border: #2d3748;
+  --background: #f3f4f6;
+  --background-secondary: #e5e7eb;
+  --background-tertiary: #d1d5db;
+  --surface: #ffffff;
+  --surface-hover: #f9fafb;
+  --border: #e5e7eb;
   --border-accent: #3b82f6;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
   --accent-blue: #3b82f6;
   --accent-blue-light: #60a5fa;
   --accent-green: #10b981;
   --accent-yellow: #f59e0b;
   --accent-red: #ef4444;
-  --gradient-start: #1e3a5f;
-  --gradient-end: #0a0f1e;
+  --gradient-start: #dbeafe;
+  --gradient-end: #f3f4f6;
 }
 
 * {
@@ -37,6 +37,7 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
 }
 
 /* Scrollbar styles */
@@ -72,10 +73,10 @@ body {
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(30, 41, 59, 0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* Gradient text utility */
@@ -121,8 +122,8 @@ body {
 /* Grid background pattern */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
