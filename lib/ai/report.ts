@@ -5,7 +5,7 @@ import OpenAI from "openai";
 import type { AnalysisResults, PropertyInputs, PropertyType } from "@/types";
 import { fmtCurrency, fmtPercent } from "@/lib/calculations/core";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY ?? "placeholder" });
 
 export async function generateAIReport(
   propertyType: PropertyType,
