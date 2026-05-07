@@ -143,7 +143,7 @@ export default function Dashboard() {
             >
               <span className="text-gray-900 text-xs font-black">R</span>
             </div>
-            <span className="text-gray-900 font-bold text-sm">Realytics</span>
+            <span className="text-white font-bold text-sm">Realytics AI</span>
           </Link>
           <div className="flex items-center gap-3">
             {result && (

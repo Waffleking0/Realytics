@@ -234,12 +234,12 @@ export default function AnalyzePage() {
               <span className="hidden sm:block">Back</span>
             </Link>
             <div className="w-px h-5 bg-gray-200" />
-            <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
-                <Building2 className="w-4 h-4 text-gray-900" />
+                <Building2 className="w-4 h-4 text-white" />
               </div>
-              <span className="text-lg font-bold text-gray-900">Realytics</span>
-            </div>
+              <span className="text-lg font-bold text-gray-900">Realytics AI</span>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             {result && (

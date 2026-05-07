@@ -206,7 +206,7 @@ export default function PricingPage() {
             <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
               <Building2 className="w-4 h-4 text-white" />
             </div>
-            <span className="text-lg font-bold text-gray-900">Realytics</span>
+            <span className="text-lg font-bold text-gray-900">Realytics AI</span>
           </Link>
           <div className="flex items-center gap-3">
             {session ? (
