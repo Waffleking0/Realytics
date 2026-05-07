@@ -3,7 +3,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Building2, CheckCircle2, BarChart3, Brain, TrendingUp, Shield } from "lucide-react";
+import { Building2, CheckCircle2, BarChart3, Brain, TrendingUp, Shield, Eye, EyeOff } from "lucide-react";
 
 const perks = [
   { icon: BarChart3,   text: "Full financial metrics — cap rate, IRR, cash flow" },
@@ -20,14 +20,21 @@ const included = [
 
 export default function SignUpPage() {
   const router = useRouter();
-  const [name,     setName]     = useState("");
-  const [email,    setEmail]    = useState("");
-  const [password, setPassword] = useState("");
-  const [error,    setError]    = useState("");
-  const [loading,  setLoading]  = useState(false);
+  const [name,            setName]            = useState("");
+  const [email,           setEmail]           = useState("");
+  const [password,        setPassword]        = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword,    setShowPassword]    = useState(false);
+  const [showConfirm,     setShowConfirm]     = useState(false);
+  const [error,           setError]           = useState("");
+  const [loading,         setLoading]         = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
     setLoading(true);
     setError("");
 
@@ -159,12 +166,48 @@ export default function SignUpPage() {
               <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
                 Password
               </label>
-              <input
-                type="password" required autoComplete="new-password" minLength={8}
-                value={password} onChange={e => setPassword(e.target.value)}
-                className="w-full rounded-xl px-4 py-3 text-sm text-gray-900 bg-gray-50 border border-gray-200 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
-                placeholder="Min. 8 characters"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"} required autoComplete="new-password" minLength={8}
+                  value={password} onChange={e => setPassword(e.target.value)}
+                  className="w-full rounded-xl px-4 py-3 pr-11 text-sm text-gray-900 bg-gray-50 border border-gray-200 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                  placeholder="Min. 8 characters"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(v => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirm ? "text" : "password"} required autoComplete="new-password" minLength={8}
+                  value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                  className={`w-full rounded-xl px-4 py-3 pr-11 text-sm text-gray-900 bg-gray-50 border outline-none focus:ring-2 transition-all ${
+                    confirmPassword && confirmPassword !== password
+                      ? "border-red-300 focus:border-red-400 focus:ring-red-400/10"
+                      : "border-gray-200 focus:border-blue-500 focus:ring-blue-500/10"
+                  }`}
+                  placeholder="Re-enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(v => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              {confirmPassword && confirmPassword !== password && (
+                <p className="text-xs text-red-500 mt-1">Passwords do not match</p>
+              )}
             </div>
 
             <button
