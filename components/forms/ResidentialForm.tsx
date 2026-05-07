@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import DownPaymentInput from '@/components/ui/DownPaymentInput';
 import type { ResidentialInputs } from '@/types';
 import { BarChart3 } from 'lucide-react';
 
@@ -100,15 +101,11 @@ export default function ResidentialForm({ onSubmit, loading }: ResidentialFormPr
             error={errors.purchasePrice}
             required
           />
-          <Input
-            label={`Down Payment ${downPaymentPct !== '0' ? `(${downPaymentPct}%)` : ''}`}
-            type="number"
-            prefix="$"
-            placeholder="70,000"
-            value={form.downPayment || ''}
-            onChange={(e) => update('downPayment', parseFloat(e.target.value) || 0)}
+          <DownPaymentInput
+            purchasePrice={form.purchasePrice}
+            value={form.downPayment}
+            onChange={(v) => update('downPayment', v)}
             error={errors.downPayment}
-            hint={loanAmount > 0 ? `Loan amount: $${loanAmount.toLocaleString()}` : undefined}
             required
           />
           <Input

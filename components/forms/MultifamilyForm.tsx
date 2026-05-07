@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
+import DownPaymentInput from '@/components/ui/DownPaymentInput';
 import type { MultifamilyInputs } from '@/types';
 import { BarChart3 } from 'lucide-react';
 
@@ -156,15 +157,11 @@ export default function MultifamilyForm({ onSubmit, loading }: MultifamilyFormPr
             hint={pricePerUnit > 0 ? `$${pricePerUnit.toLocaleString()} / unit` : undefined}
             required
           />
-          <Input
-            label="Down Payment"
-            type="number"
-            prefix="$"
-            placeholder="300,000"
-            value={form.downPayment || ''}
-            onChange={(e) => update('downPayment', parseFloat(e.target.value) || 0)}
+          <DownPaymentInput
+            purchasePrice={form.purchasePrice}
+            value={form.downPayment}
+            onChange={(v) => update('downPayment', v)}
             error={errors.downPayment}
-            hint={form.purchasePrice > 0 && form.downPayment > 0 ? `${((form.downPayment / form.purchasePrice) * 100).toFixed(1)}%` : undefined}
             required
           />
           <Input
