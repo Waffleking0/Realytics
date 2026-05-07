@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/config';
+import { prisma } from '@/lib/prisma';
+import { TIERS, type UserTier } from '@/lib/tier';
+import { fetchRealComparables, fetchPropertyTax } from '@/lib/analysis/rentcast';
 import type {
   PropertyType,
   ResidentialInputs,
@@ -20,6 +25,56 @@ import { findComparables } from '@/lib/analysis/comparables';
 import { analyzeMarket } from '@/lib/analysis/market';
 import { generateAIReport } from '@/lib/analysis/aiReport';
 
+async function resolveUserTier(): Promise<{ tier: UserTier; userId: string | null }> {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) return { tier: 'FREE', userId: null };
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true, tier: true, monthlyAnalyses: true, analysisResetAt: true },
+    });
+
+    if (!user) return { tier: 'FREE', userId: null };
+    return { tier: user.tier as UserTier, userId: user.id };
+  } catch {
+    return { tier: 'FREE', userId: null };
+  }
+}
+
+async function checkAndIncrementUsage(userId: string, tier: UserTier): Promise<boolean> {
+  const limit = TIERS[tier].monthlyAnalyses;
+  if (limit === -1) {
+    // unlimited — still increment for analytics
+    await prisma.user.update({ where: { id: userId }, data: { monthlyAnalyses: { increment: 1 } } });
+    return true;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { monthlyAnalyses: true, analysisResetAt: true },
+  });
+  if (!user) return false;
+
+  const now = new Date();
+  const resetAt = new Date(user.analysisResetAt);
+  const sameMonth =
+    now.getFullYear() === resetAt.getFullYear() && now.getMonth() === resetAt.getMonth();
+  const count = sameMonth ? user.monthlyAnalyses : 0;
+
+  if (count >= limit) return false;
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      monthlyAnalyses: sameMonth ? { increment: 1 } : 1,
+      ...(sameMonth ? {} : { analysisResetAt: now }),
+    },
+  });
+
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -35,7 +90,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Run financial calculations
+    const { tier, userId } = await resolveUserTier();
+
+    // Enforce monthly limit for authenticated users
+    if (userId) {
+      const allowed = await checkAndIncrementUsage(userId, tier);
+      if (!allowed) {
+        const limit = TIERS[tier].monthlyAnalyses;
+        return NextResponse.json(
+          {
+            error: `You've reached your ${limit} analyses/month limit on the ${TIERS[tier].name} plan. Upgrade to continue.`,
+            limitReached: true,
+          },
+          { status: 429 }
+        );
+      }
+    }
+
+    // Financial calculations
     let financialResults;
     let location = '';
     let purchasePrice = 0;
@@ -83,10 +155,19 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid property type' }, { status: 400 });
     }
 
-    // Find comparable properties
-    const comparables = findComparables(type, purchasePrice, propertySize);
+    // Comparables: real data for Pro (if Rentcast key is set), mock otherwise
+    let comparables = findComparables(type, purchasePrice, propertySize);
+    let propertyTax = undefined;
 
-    // Run market analysis
+    if (tier === 'PRO' && location) {
+      const [realComps, taxData] = await Promise.all([
+        fetchRealComparables(location, type, purchasePrice),
+        fetchPropertyTax(location),
+      ]);
+      if (realComps.length > 0) comparables = realComps;
+      if (taxData.annualTax !== undefined) propertyTax = taxData;
+    }
+
     const marketAnalysis = analyzeMarket(
       type,
       location,
@@ -94,15 +175,19 @@ export async function POST(request: NextRequest) {
       financialResults.cashOnCashReturn
     );
 
-    // Generate AI report
-    const aiReport = generateAIReport(type, inputs as unknown as Record<string, unknown>, financialResults, marketAnalysis);
+    const aiReport = generateAIReport(
+      type,
+      inputs as unknown as Record<string, unknown>,
+      financialResults,
+      marketAnalysis
+    );
 
-    // Generate cash flow projections
-    const appreciationRate = type === 'land' ? (inputs as LandInputs).expectedAppreciationRate / 100 : 0.04;
+    const appreciationRate =
+      type === 'land' ? (inputs as LandInputs).expectedAppreciationRate / 100 : 0.04;
     const downPayment =
       type === 'residential' ? (inputs as ResidentialInputs).downPayment :
-      type === 'multifamily' ? (inputs as MultifamilyInputs).downPayment :
-      type === 'commercial' ? (inputs as CommercialInputs).downPayment :
+      type === 'multifamily'  ? (inputs as MultifamilyInputs).downPayment :
+      type === 'commercial'   ? (inputs as CommercialInputs).downPayment :
       purchasePrice * 0.25;
 
     const projections = generateCashFlowProjections(
@@ -123,6 +208,8 @@ export async function POST(request: NextRequest) {
       aiReport,
       projections,
       timestamp: new Date().toISOString(),
+      userTier: tier,
+      propertyTax,
     };
 
     return NextResponse.json(result);

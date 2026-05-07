@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type {
   PropertyType,
   AnalysisResult,
@@ -55,6 +56,39 @@ export default function Dashboard() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [userTier, setUserTier] = useState<string | null>(null);
+  const [hasSubscription, setHasSubscription] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("upgraded") === "true") {
+      setShowUpgradeBanner(true);
+      router.replace("/dashboard");
+    }
+    fetch("/api/user/me")
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => {
+        if (d) {
+          setUserTier(d.tier);
+          setHasSubscription(d.hasSubscription);
+        }
+      })
+      .catch(() => null);
+  }, [router]);
+
+  async function openPortal() {
+    setPortalLoading(true);
+    try {
+      const res = await fetch("/api/stripe/portal", { method: "POST" });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } finally {
+      setPortalLoading(false);
+    }
+  }
 
   async function handleSubmit(inputs: FormInputs) {
     setLoading(true);
@@ -134,11 +168,60 @@ export default function Dashboard() {
             >
               Saved Deals
             </Link>
+            {hasSubscription ? (
+              <button
+                onClick={openPortal}
+                disabled={portalLoading}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
+                style={{
+                  background: "rgba(59,130,246,0.08)",
+                  border: "1px solid rgba(59,130,246,0.2)",
+                }}
+              >
+                {portalLoading ? "Opening…" : "Manage Plan"}
+              </button>
+            ) : (
+              <Link
+                href="/pricing"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg text-blue-400 hover:text-blue-300 transition-colors"
+                style={{
+                  background: "rgba(59,130,246,0.08)",
+                  border: "1px solid rgba(59,130,246,0.2)",
+                }}
+              >
+                Upgrade
+              </Link>
+            )}
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-5 py-8">
+        {/* Upgrade success banner */}
+        {showUpgradeBanner && (
+          <div
+            className="mb-6 rounded-2xl px-5 py-4 flex items-center justify-between gap-4"
+            style={{
+              background: "rgba(16,185,129,0.08)",
+              border: "1px solid rgba(16,185,129,0.25)",
+            }}
+          >
+            <div>
+              <p className="text-sm font-bold text-emerald-400">
+                🎉 Welcome to {userTier ?? "your new plan"}!
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Your account has been upgraded. All new features are now unlocked.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowUpgradeBanner(false)}
+              className="text-xs text-gray-500 hover:text-gray-400 flex-shrink-0"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
         {/* Property Type Selector */}
         <div
           className="rounded-2xl p-5 mb-6"

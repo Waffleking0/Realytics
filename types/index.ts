@@ -155,6 +155,12 @@ export interface ProjectionYear {
   [key: string]: any;
 }
 
+export interface PropertyTaxData {
+  assessedValue?: number;
+  annualTax?: number;
+  taxYear?: number;
+}
+
 export interface AnalysisResult {
   inputs: ResidentialInputs | LandInputs | CommercialInputs | MultifamilyInputs | DevelopmentInputs;
   type: PropertyType;
@@ -164,6 +170,8 @@ export interface AnalysisResult {
   aiReport: AIReport;
   projections: ProjectionYear[];
   timestamp: string;
+  userTier?: string;
+  propertyTax?: PropertyTaxData;
   dealScore?: any;
   recommendation?: 'Buy' | 'Hold' | 'Pass';
   riskScore?: number;

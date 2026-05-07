@@ -7,15 +7,10 @@ import {
   Building2,
   ArrowLeft,
   RefreshCw,
-  Download,
-  ChevronDown,
   AlertCircle,
-  Loader2,
-  TrendingUp,
   BarChart3,
-  MapPin,
-  Brain,
-  DollarSign,
+  Sparkles,
+  Receipt,
 } from 'lucide-react';
 
 import type {
@@ -28,6 +23,8 @@ import type {
   DevelopmentInputs,
 } from '@/types';
 
+import type { UserTier } from '@/lib/tier';
+
 import PropertyTypeSelector from '@/components/PropertyTypeSelector';
 import ResidentialForm from '@/components/forms/ResidentialForm';
 import LandForm from '@/components/forms/LandForm';
@@ -36,6 +33,7 @@ import MultifamilyForm from '@/components/forms/MultifamilyForm';
 import DevelopmentForm from '@/components/forms/DevelopmentForm';
 
 import Card from '@/components/ui/Card';
+import LockedFeature from '@/components/ui/LockedFeature';
 import MetricCard from '@/components/dashboard/MetricCard';
 import CashFlowChart from '@/components/dashboard/CashFlowChart';
 import ComparableProperties from '@/components/dashboard/ComparableProperties';
@@ -51,10 +49,6 @@ function formatCurrency(value: number): string {
   if (abs >= 1000000) return `${sign}$${(abs / 1000000).toFixed(2)}M`;
   if (abs >= 1000) return `${sign}$${(abs / 1000).toFixed(1)}K`;
   return `${sign}$${abs.toLocaleString()}`;
-}
-
-function formatPercent(value: number): string {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
 }
 
 function getSentiment(value: number, goodThreshold: number, badThreshold: number): 'positive' | 'neutral' | 'negative' {
@@ -96,7 +90,6 @@ export default function AnalyzePage() {
 
       setResult(data as AnalysisResult);
 
-      // Smooth scroll to results after a short delay
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
@@ -117,7 +110,6 @@ export default function AnalyzePage() {
   const getMetrics = (result: AnalysisResult) => {
     const r = result.financialResults;
     const type = result.type;
-
     const metrics = [];
 
     if (type !== 'land') {
@@ -259,7 +251,12 @@ export default function AnalyzePage() {
                 New Analysis
               </button>
             )}
-            <span className="text-xs text-gray-500 hidden sm:block">Deal Analyzer</span>
+            <Link
+              href="/pricing"
+              className="px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-500 border border-blue-200 hover:border-blue-300 rounded-lg transition-colors hidden sm:block"
+            >
+              Upgrade
+            </Link>
           </div>
         </div>
       </nav>
@@ -277,7 +274,6 @@ export default function AnalyzePage() {
 
         {/* Input Section */}
         <div className="space-y-6 mb-8">
-          {/* Property Type Selector */}
           <Card glass>
             <PropertyTypeSelector
               selected={propertyType}
@@ -285,41 +281,25 @@ export default function AnalyzePage() {
             />
           </Card>
 
-          {/* Form */}
           <Card
             title={`${propertyType.charAt(0).toUpperCase() + propertyType.slice(1)} Property Details`}
             subtitle="Fill in all fields for the most accurate analysis"
             glass
           >
             {propertyType === 'residential' && (
-              <ResidentialForm
-                onSubmit={(inputs) => handleSubmit(inputs)}
-                loading={loading}
-              />
+              <ResidentialForm onSubmit={(inputs) => handleSubmit(inputs)} loading={loading} />
             )}
             {propertyType === 'land' && (
-              <LandForm
-                onSubmit={(inputs) => handleSubmit(inputs)}
-                loading={loading}
-              />
+              <LandForm onSubmit={(inputs) => handleSubmit(inputs)} loading={loading} />
             )}
             {propertyType === 'commercial' && (
-              <CommercialForm
-                onSubmit={(inputs) => handleSubmit(inputs)}
-                loading={loading}
-              />
+              <CommercialForm onSubmit={(inputs) => handleSubmit(inputs)} loading={loading} />
             )}
             {propertyType === 'multifamily' && (
-              <MultifamilyForm
-                onSubmit={(inputs) => handleSubmit(inputs)}
-                loading={loading}
-              />
+              <MultifamilyForm onSubmit={(inputs) => handleSubmit(inputs)} loading={loading} />
             )}
             {propertyType === 'development' && (
-              <DevelopmentForm
-                onSubmit={(inputs) => handleSubmit(inputs)}
-                loading={loading}
-              />
+              <DevelopmentForm onSubmit={(inputs) => handleSubmit(inputs)} loading={loading} />
             )}
           </Card>
         </div>
@@ -345,131 +325,210 @@ export default function AnalyzePage() {
             <div>
               <p className="text-sm font-medium text-red-400">Analysis Failed</p>
               <p className="text-sm text-gray-500 mt-0.5">{error}</p>
+              {error.includes('limit') && (
+                <Link href="/pricing" className="inline-block mt-2 text-xs font-medium text-blue-600 hover:underline">
+                  View upgrade options →
+                </Link>
+              )}
             </div>
           </div>
         )}
 
         {/* Results Dashboard */}
-        {result && !loading && (
-          <div ref={resultsRef} className="space-y-6 animate-fade-in">
-            {/* Results Header */}
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-blue-400" />
-                  Analysis Results
-                </h2>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  Generated {new Date(result.timestamp).toLocaleString()} · {result.type.charAt(0).toUpperCase() + result.type.slice(1)} Property
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div
-                  className={clsx(
-                    'px-4 py-2 rounded-xl text-sm font-bold border',
-                    result.aiReport.recommendation === 'Buy'
-                      ? 'bg-green-500/15 border-green-500/40 text-green-400'
-                      : result.aiReport.recommendation === 'Hold'
-                      ? 'bg-yellow-500/15 border-yellow-500/40 text-yellow-400'
-                      : 'bg-red-500/15 border-red-500/40 text-red-400'
-                  )}
-                >
-                  {result.aiReport.recommendation}
+        {result && !loading && (() => {
+          const tier = (result.userTier as UserTier) ?? 'FREE';
+
+          return (
+            <div ref={resultsRef} className="space-y-6 animate-fade-in">
+              {/* Results Header */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-blue-400" />
+                    Analysis Results
+                  </h2>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    Generated {new Date(result.timestamp).toLocaleString()} · {result.type.charAt(0).toUpperCase() + result.type.slice(1)} Property
+                    {tier !== 'FREE' && (
+                      <span className="ml-2 px-1.5 py-0.5 bg-blue-50 text-blue-600 text-xs rounded-md font-medium capitalize">
+                        {tier.toLowerCase()} plan
+                      </span>
+                    )}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className={clsx(
+                      'px-4 py-2 rounded-xl text-sm font-bold border',
+                      result.aiReport.recommendation === 'Buy'
+                        ? 'bg-green-500/15 border-green-500/40 text-green-400'
+                        : result.aiReport.recommendation === 'Hold'
+                        ? 'bg-yellow-500/15 border-yellow-500/40 text-yellow-400'
+                        : 'bg-red-500/15 border-red-500/40 text-red-400'
+                    )}
+                  >
+                    {result.aiReport.recommendation}
+                    <span className="ml-2 text-xs font-normal opacity-70">
+                      {result.aiReport.confidenceScore}% confidence
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Key Financial Metrics Grid */}
-            <Card
-              title="Financial Metrics"
-              subtitle="Core investment performance indicators"
-              accent="blue"
-            >
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {getMetrics(result).map((metric) => (
-                  <MetricCard
-                    key={metric.label}
-                    label={metric.label}
-                    value={metric.value}
-                    sentiment={metric.sentiment}
-                    trend={metric.trend}
-                    description={metric.description}
-                  />
-                ))}
-              </div>
-            </Card>
+              {/* Free tier upgrade banner */}
+              {tier === 'FREE' && (
+                <div className="flex items-center justify-between gap-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-semibold text-blue-900">You&apos;re on the Free plan</p>
+                      <p className="text-xs text-blue-700">Unlock financial metrics, market analysis, comps, and more starting at $29/month.</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/pricing"
+                    className="flex-shrink-0 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    Upgrade
+                  </Link>
+                </div>
+              )}
 
-            {/* Cash Flow Chart */}
-            <Card
-              title="10-Year Cash Flow Projections"
-              subtitle="Annual and cumulative cash flow over the holding period"
-              accent="blue"
-            >
-              <CashFlowChart projections={result.projections} />
-            </Card>
-
-            {/* 2-column section: Comparables + Risk */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Comparable Properties */}
+              {/* Financial Metrics Grid */}
               <Card
-                title="Comparable Properties"
-                subtitle={`${result.comparables.length} comps found in the area`}
-                accent="purple"
+                title="Financial Metrics"
+                subtitle="Core investment performance indicators"
+                accent="blue"
               >
-                <ComparableProperties
-                  comparables={result.comparables}
-                  subjectPrice={
-                    result.type === 'residential' ? (result.inputs as ResidentialInputs).purchasePrice :
-                    result.type === 'multifamily' ? (result.inputs as MultifamilyInputs).purchasePrice :
-                    result.type === 'commercial' ? (result.inputs as CommercialInputs).purchasePrice :
-                    result.type === 'development' ? (result.inputs as DevelopmentInputs).landCost + (result.inputs as DevelopmentInputs).constructionCost :
-                    (result.inputs as LandInputs).purchasePrice
-                  }
-                  subjectCapRate={result.financialResults.capRate}
-                />
+                <LockedFeature feature="financialMetrics" userTier={tier} minHeight="160px">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {getMetrics(result).map((metric) => (
+                      <MetricCard
+                        key={metric.label}
+                        label={metric.label}
+                        value={metric.value}
+                        sentiment={metric.sentiment}
+                        trend={metric.trend}
+                        description={metric.description}
+                      />
+                    ))}
+                  </div>
+                </LockedFeature>
               </Card>
 
-              {/* Risk Score */}
+              {/* Cash Flow Projections */}
               <Card
-                title="Market Risk Analysis"
-                subtitle={`${result.marketAnalysis.riskLevel} Risk · ${result.marketAnalysis.marketStrength} Market`}
+                title="10-Year Cash Flow Projections"
+                subtitle="Annual and cumulative cash flow over the holding period"
+                accent="blue"
+              >
+                <LockedFeature feature="projections" userTier={tier} minHeight="220px">
+                  <CashFlowChart projections={result.projections} />
+                </LockedFeature>
+              </Card>
+
+              {/* Comparables + Risk */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card
+                  title="Comparable Properties"
+                  subtitle={
+                    tier === 'PRO' && result.comparables.length > 0
+                      ? `${result.comparables.length} recent sales found nearby`
+                      : `${result.comparables.length} comps found in the area`
+                  }
+                  accent="purple"
+                >
+                  <LockedFeature feature="mockComparables" userTier={tier} minHeight="200px">
+                    <ComparableProperties
+                      comparables={result.comparables}
+                      subjectPrice={
+                        result.type === 'residential' ? (result.inputs as ResidentialInputs).purchasePrice :
+                        result.type === 'multifamily' ? (result.inputs as MultifamilyInputs).purchasePrice :
+                        result.type === 'commercial' ? (result.inputs as CommercialInputs).purchasePrice :
+                        result.type === 'development'
+                          ? (result.inputs as DevelopmentInputs).landCost + (result.inputs as DevelopmentInputs).constructionCost
+                          : (result.inputs as LandInputs).purchasePrice
+                      }
+                      subjectCapRate={result.financialResults.capRate}
+                    />
+                  </LockedFeature>
+                </Card>
+
+                <Card
+                  title="Market Risk Analysis"
+                  subtitle={`${result.marketAnalysis.riskLevel} Risk · ${result.marketAnalysis.marketStrength} Market`}
+                  accent={
+                    result.marketAnalysis.riskLevel === 'Low' ? 'green' :
+                    result.marketAnalysis.riskLevel === 'Medium' ? 'yellow' : 'red'
+                  }
+                >
+                  <LockedFeature feature="marketAnalysis" userTier={tier} minHeight="200px">
+                    <RiskScore marketAnalysis={result.marketAnalysis} />
+                  </LockedFeature>
+                </Card>
+              </div>
+
+              {/* Property Tax (Pro only, when Rentcast data is available) */}
+              {tier === 'PRO' && result.propertyTax && (
+                <Card title="Property Tax Data" subtitle="Retrieved from public records" accent="blue">
+                  <div className="flex flex-wrap gap-6">
+                    {result.propertyTax.annualTax !== undefined && (
+                      <div className="flex items-center gap-3">
+                        <Receipt className="w-4 h-4 text-gray-400" />
+                        <div>
+                          <p className="text-xs text-gray-500">Annual Property Tax</p>
+                          <p className="text-base font-bold text-gray-900">
+                            {formatCurrency(result.propertyTax.annualTax)}
+                            {result.propertyTax.taxYear && (
+                              <span className="text-xs font-normal text-gray-400 ml-1">({result.propertyTax.taxYear})</span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {result.propertyTax.assessedValue !== undefined && (
+                      <div>
+                        <p className="text-xs text-gray-500">Assessed Value</p>
+                        <p className="text-base font-bold text-gray-900">
+                          {formatCurrency(result.propertyTax.assessedValue)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              )}
+
+              {/* AI Report */}
+              <Card
+                title="AI Investment Analysis"
+                subtitle="Comprehensive investment thesis and recommendation"
                 accent={
-                  result.marketAnalysis.riskLevel === 'Low' ? 'green' :
-                  result.marketAnalysis.riskLevel === 'Medium' ? 'yellow' : 'red'
+                  result.aiReport.recommendation === 'Buy' ? 'green' :
+                  result.aiReport.recommendation === 'Hold' ? 'yellow' : 'red'
                 }
               >
-                <RiskScore marketAnalysis={result.marketAnalysis} />
+                <LockedFeature feature="aiReport" userTier={tier} minHeight="200px">
+                  <AIReport report={result.aiReport} />
+                </LockedFeature>
               </Card>
-            </div>
 
-            {/* AI Report */}
-            <Card
-              title="AI Investment Analysis"
-              subtitle="Comprehensive investment thesis and recommendation"
-              accent={
-                result.aiReport.recommendation === 'Buy' ? 'green' :
-                result.aiReport.recommendation === 'Hold' ? 'yellow' : 'red'
-              }
-            >
-              <AIReport report={result.aiReport} />
-            </Card>
-
-            {/* Bottom CTA */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-gray-50 border border-gray-300/50 rounded-xl">
-              <div>
-                <p className="text-sm font-medium text-gray-900">Want to analyze another deal?</p>
-                <p className="text-xs text-gray-500">Start fresh with new property details.</p>
+              {/* Bottom CTA */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-gray-50 border border-gray-300/50 rounded-xl">
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Want to analyze another deal?</p>
+                  <p className="text-xs text-gray-500">Start fresh with new property details.</p>
+                </div>
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-sm transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  New Analysis
+                </button>
               </div>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl text-sm transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                New Analysis
-              </button>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
