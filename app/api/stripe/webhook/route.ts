@@ -10,6 +10,15 @@ function priceIdToTier(priceId: string): UserTier {
   return 'FREE';
 }
 
+async function updateByCustomerId(
+  customerId: string,
+  data: Parameters<typeof prisma.user.update>[0]['data']
+) {
+  const user = await prisma.user.findFirst({ where: { stripeCustomerId: customerId } });
+  if (!user) return;
+  await prisma.user.update({ where: { id: user.id }, data });
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const sig = request.headers.get('stripe-signature');
@@ -29,7 +38,6 @@ export async function POST(request: NextRequest) {
 
   try {
     switch (event.type) {
-      // Payment succeeded — subscription is now active
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.mode !== 'subscription') break;
@@ -38,42 +46,33 @@ export async function POST(request: NextRequest) {
         const subscriptionId = session.subscription as string;
         const tier = (session.metadata?.tier as UserTier) ?? 'ANALYST';
 
-        await prisma.user.update({
-          where: { stripeCustomerId: customerId },
-          data: { tier, stripeSubscriptionId: subscriptionId },
-        });
+        await updateByCustomerId(customerId, { tier, stripeSubscriptionId: subscriptionId });
         break;
       }
 
-      // Plan changed (upgrade / downgrade between Analyst and Pro)
       case 'customer.subscription.updated': {
         const sub = event.data.object as Stripe.Subscription;
-        const customerId = sub.customer as string;
         const priceId = sub.items.data[0]?.price.id ?? '';
         const tier = priceIdToTier(priceId);
 
         if (sub.status === 'active' || sub.status === 'trialing') {
-          await prisma.user.update({
-            where: { stripeCustomerId: customerId },
-            data: { tier, stripeSubscriptionId: sub.id },
+          await updateByCustomerId(sub.customer as string, {
+            tier,
+            stripeSubscriptionId: sub.id,
           });
         }
         break;
       }
 
-      // Subscription cancelled or payment permanently failed after all retries
       case 'customer.subscription.deleted': {
         const sub = event.data.object as Stripe.Subscription;
-        const customerId = sub.customer as string;
-
-        await prisma.user.update({
-          where: { stripeCustomerId: customerId },
-          data: { tier: 'FREE', stripeSubscriptionId: null },
+        await updateByCustomerId(sub.customer as string, {
+          tier: 'FREE',
+          stripeSubscriptionId: null,
         });
         break;
       }
 
-      // No action needed — Stripe retries automatically; downgrade only on subscription.deleted
       case 'invoice.payment_failed':
         break;
     }
